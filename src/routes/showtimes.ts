@@ -29,6 +29,18 @@ showtimesRoute.get('/:id', (c) => {
   return c.json(showtime)
 })
 
+// DELETE showtime by ID
+showtimesRoute.delete('/:id', (c) => {
+  const id = c.req.param('id')
+  const showtime = showtimes.find(s => s.id === id)
+  
+  if (!showtime) {
+    return c.json({ error: 'Showtime not found' }, 404)
+  }
+  
+  return c.json(showtime)
+})
+
 // Get available seats for a showtime
 showtimesRoute.get('/:id/seats', (c) => {
   const id = c.req.param('id')

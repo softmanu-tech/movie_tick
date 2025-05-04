@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
-// 1. Define proper types
+// 1.  types
 interface Booking {
   id: string
   movieId: string
@@ -26,7 +26,8 @@ type BookingResponse = {
 // 2. Initialize Map with proper types
 const bookings = new Map<string, Booking>()
 
-// 3. Zod schema remains the same
+// 3. Zod schema 
+
 const bookingSchema = z.object({
   movieId: z.string(),
   showtimeId: z.string(),

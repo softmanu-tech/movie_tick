@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-const SignInPage = () => {
+export default function SignInPage (){
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [registerName, setRegisterName] = useState("");
@@ -20,34 +20,65 @@ const SignInPage = () => {
   
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    
-    // Demo login - in a real app, this would authenticate with a backend
-    if (loginEmail && loginPassword) {
-      setSuccess("Login successful!");
-      setTimeout(() => {
-        navigate("/");
-      }, 1500);
-    } else {
-      setError("Please enter both email and password");
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: loginEmail,
+          password: loginPassword
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setSuccess("Login successful!");
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
+      }
+      
+    } catch (error) {
+      console.error(error);
+      setError("Something went wrong. Please try again later.");
+      
     }
+    
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    
-    // Demo registration - in a real app, this would register with a backend
-    if (registerName && registerEmail && registerPassword) {
-      setSuccess("Registration successful! You can now login.");
-      setTimeout(() => {
-        document.getElementById("login-tab")?.click();
-      }, 1500);
-    } else {
-      setError("Please fill in all fields");
-    }
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: registerName,
+          email: registerEmail,
+          password: registerPassword
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSuccess("Registration successful! You can now login.");
+        setTimeout(() => {
+          document.getElementById("login-tab")?.click();
+        }, 1500);
+      }
+
+    } catch (error) {
+      console.error(error);
+      setError("Something went wrong. Please try again later.");
+      
   };
 
   return (
@@ -191,4 +222,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+}

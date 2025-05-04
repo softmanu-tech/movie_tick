@@ -1,2 +1,2 @@
-# Welcome to your Lovable project
+# Welcome my Cinema Ticket Rambler
 
